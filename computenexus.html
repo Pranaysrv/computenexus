@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ComputeNexus — Microsecond Precision Protocol Testing</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --bg2: #F5F6F8;
+    --ink: #0A0A0F;
+    --ink2: #2C2C3A;
+    --ink3: #6B6B80;
+    --accent: #C84B2F;
+    --accent2: #1A3A5C;
+    --gold: #B8924A;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Syne', sans-serif;
+    --serif: 'Instrument Serif', serif;
+    --r: 3px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3rem;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(15,14,12,0.08);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+  .nav-links {
+    display: flex; gap: 2.2rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--ink);
+    border: none;
+    padding: 0.55rem 1.3rem;
+    cursor: none;
+    border-radius: var(--r);
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 3rem 5rem 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.6rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: var(--sans);
+    font-size: clamp(3rem, 5.5vw, 5.2rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .hero-title em {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+  .hero-tagline {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: var(--ink3);
+    margin: 1.6rem 0 2.4rem;
+    line-height: 1.7;
+    max-width: 420px;
+    border-left: 2px solid var(--gold);
+    padding-left: 1rem;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.9rem 2rem;
+    border: none; cursor: none;
+    border-radius: var(--r);
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+  .btn-secondary {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink);
+    padding: 0.9rem 2rem;
+    border: 1.5px solid var(--ink);
+    cursor: none;
+    border-radius: var(--r);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* HERO 3D SCENE */
+  .hero-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4rem 2rem;
+  }
+
+  .scene-3d {
+    position: relative;
+    width: 480px; height: 480px;
+    perspective: 900px;
+  }
+
+  .latency-card {
+    position: absolute;
+    border-radius: 12px;
+    background: #FAFBFF;
+    border: 1px solid rgba(10,10,15,0.09);
+    box-shadow: 0 20px 60px rgba(15,14,12,0.08), 0 4px 16px rgba(15,14,12,0.04);
+    padding: 1.4rem 1.6rem;
+    transform-style: preserve-3d;
+    animation: float 6s ease-in-out infinite;
+  }
+  .card-main {
+    width: 320px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotateX(8deg) rotateY(-8deg);
+    z-index: 3;
+    animation-delay: 0s;
+  }
+  .card-secondary {
+    width: 240px;
+    top: 15%; right: 2%;
+    transform: rotateX(12deg) rotateY(-15deg) rotateZ(3deg);
+    z-index: 2;
+    opacity: 0.85;
+    animation-delay: 1.5s;
+    animation-duration: 7s;
+  }
+  .card-tertiary {
+    width: 200px;
+    bottom: 12%; left: 2%;
+    transform: rotateX(6deg) rotateY(12deg) rotateZ(-2deg);
+    z-index: 2;
+    opacity: 0.75;
+    animation-delay: 3s;
+    animation-duration: 8s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(-50%, -50%) rotateX(8deg) rotateY(-8deg) translateY(0); }
+    50% { transform: translate(-50%, -50%) rotateX(10deg) rotateY(-6deg) translateY(-12px); }
+  }
+  .card-secondary { animation-name: floatAlt; }
+  .card-tertiary { animation-name: floatAlt2; }
+  @keyframes floatAlt {
+    0%,100% { transform: rotateX(12deg) rotateY(-15deg) rotateZ(3deg) translateY(0); }
+    50% { transform: rotateX(10deg) rotateY(-12deg) rotateZ(3deg) translateY(-10px); }
+  }
+  @keyframes floatAlt2 {
+    0%,100% { transform: rotateX(6deg) rotateY(12deg) rotateZ(-2deg) translateY(0); }
+    50% { transform: rotateX(8deg) rotateY(10deg) rotateZ(-2deg) translateY(-8px); }
+  }
+
+  .card-title {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .card-title::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: block;
+  }
+
+  /* Timeline bars */
+  .timeline { display: flex; flex-direction: column; gap: 0.55rem; }
+  .tl-row { display: flex; align-items: center; gap: 0.7rem; }
+  .tl-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink3);
+    width: 52px; flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+  .tl-bar-wrap {
+    flex: 1;
+    height: 6px;
+    background: var(--bg2);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .tl-bar {
+    height: 100%;
+    border-radius: 3px;
+    position: absolute;
+    left: 0; top: 0;
+    animation: fillBar 2s ease-out forwards;
+  }
+  @keyframes fillBar { from { width: 0; } }
+  .tl-val {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink);
+    font-weight: 500;
+    width: 38px; text-align: right;
+  }
+  .bar-dns { background: #C84B2F; width: 22%; }
+  .bar-tcp { background: #1A3A5C; width: 38%; animation-delay: 0.2s; }
+  .bar-tls { background: #B8924A; width: 18%; animation-delay: 0.4s; }
+  .bar-ttfb { background: #2A7A4B; width: 55%; animation-delay: 0.6s; }
+  .bar-dl  { background: #7A3A8C; width: 30%; animation-delay: 0.8s; }
+
+  .card-total {
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--bg2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-total-label { font-family: var(--mono); font-size: 0.6rem; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .card-total-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 500; color: var(--ink); }
+
+  /* Mini protocol card */
+  .proto-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .proto-pill {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    border: 1px solid currentColor;
+  }
+  .pill-red { color: var(--accent); }
+  .pill-blue { color: var(--accent2); }
+  .pill-gold { color: var(--gold); }
+  .pill-green { color: #2A7A4B; }
+
+  /* AI suggestion card */
+  .ai-insight {
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .ai-line {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    line-height: 1.5;
+    color: var(--ink2);
+    background: var(--bg2);
+    border-left: 2px solid var(--gold);
+    padding: 0.4rem 0.6rem;
+    border-radius: 0 2px 2px 0;
+  }
+  .ai-badge {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 0.4rem;
+  }
+
+  /* BG grid */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(10,10,15,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,10,15,0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  /* Floating metric badges */
+  .metric-badge {
+    position: absolute;
+    background: var(--ink);
+    color: var(--bg);
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    z-index: 10;
+    animation: badgeFloat 4s ease-in-out infinite;
+  }
+  .mb1 { top: 18%; left: 8%; animation-delay: 0.5s; }
+  .mb2 { top: 72%; right: 6%; animation-delay: 1.8s; }
+  .mb3 { bottom: 20%; left: 14%; animation-delay: 3s; }
+  @keyframes badgeFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* SECTION COMMON */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+  .section-title em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent); }
+  .section-sub {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--ink3);
+    max-width: 520px;
+  }
+
+  /* FEATURES GRID */
+  .features-section { background: var(--bg); }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: rgba(15,14,12,0.1);
+    border: 1.5px solid rgba(15,14,12,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 4rem;
+  }
+  .feat-card {
+    background: var(--bg);
+    padding: 2.4rem 2rem;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feat-card:hover { background: #FAFBFC; }
+  .feat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .feat-card:hover::after { transform: scaleX(1); }
+  .feat-icon {
+    width: 38px; height: 38px;
+    border: 1.5px solid rgba(15,14,12,0.15);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.2rem;
+    font-size: 1rem;
+  }
+  .feat-name {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .feat-desc {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: var(--ink3);
+  }
+  .feat-tag {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 1rem;
+    display: inline-block;
+  }
+
+  /* PERFORMANCE SECTION */
+  .perf-section {
+    background: var(--ink);
+    color: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .perf-section .section-label { color: var(--gold); }
+  .perf-section .section-label::before { background: var(--gold); }
+  .perf-section .section-title { color: var(--bg); }
+  .perf-section .section-sub { color: rgba(244,241,236,0.55); }
+
+  .perf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+
+  /* 3D chip illustration */
+  .chip-3d-container {
+    position: absolute;
+    right: -80px; top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.06;
+    pointer-events: none;
+  }
+  .chip-3d {
+    width: 500px; height: 500px;
+    border: 1px solid var(--bg);
+    border-radius: 24px;
+    transform: rotateX(55deg) rotateZ(30deg);
+    position: relative;
+  }
+  .chip-inner {
+    position: absolute;
+    inset: 30px;
+    border: 1px solid var(--bg);
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 8px;
+    padding: 20px;
+  }
+  .chip-cell {
+    background: rgba(244,241,236,0.3);
+    border-radius: 2px;
+  }
+
+  .perf-metric {
+    border: 1px solid rgba(244,241,236,0.12);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s;
+  }
+  .perf-metric:hover { border-color: var(--gold); }
+  .perf-metric-val {
+    font-family: var(--mono);
+    font-size: 2.6rem;
+    font-weight: 300;
+    color: var(--bg);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.04em;
+  }
+  .perf-metric-val span { font-size: 1rem; color: var(--gold); margin-left: 2px; }
+  .perf-metric-name {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,241,236,0.45);
+    margin-bottom: 0.8rem;
+  }
+  .perf-metric-desc {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    line-height: 1.7;
+    color: rgba(244,241,236,0.55);
+  }
+
+  /* OS/KERNEL VISUAL SECTION */
+  .kernel-section {
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+  .kernel-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+
+  /* Stack diagram */
+  .stack-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    perspective: 600px;
+  }
+  .stack-layer {
+    border-radius: 4px;
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: none;
+    transition: transform 0.25s;
+    transform: rotateX(4deg);
+    position: relative;
+  }
+  .stack-layer:hover { transform: rotateX(0deg) translateX(8px); }
+  .sl-app { background: #FAFBFF; border: 1.5px solid rgba(10,10,15,0.1); }
+  .sl-lib { background: #EDE9E2; border: 1.5px solid rgba(15,14,12,0.1); }
+  .sl-syscall { background: #1A3A5C; border: 1.5px solid #1A3A5C; }
+  .sl-kernel { background: #0F0E0C; border: 1.5px solid #0F0E0C; }
+  .sl-hw { background: var(--accent); border: 1.5px solid var(--accent); }
+  .sl-name {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .sl-app .sl-name, .sl-lib .sl-name { color: var(--ink); }
+  .sl-syscall .sl-name, .sl-kernel .sl-name, .sl-hw .sl-name { color: rgba(244,241,236,0.9); }
+  .sl-tag {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .sl-app .sl-tag, .sl-lib .sl-tag { color: var(--ink3); }
+  .sl-syscall .sl-tag, .sl-kernel .sl-tag, .sl-hw .sl-tag { color: rgba(244,241,236,0.5); }
+  .stack-arrow {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink3);
+    letter-spacing: 0.1em;
+    padding: 0.1rem 0;
+  }
+  .arrow-indicator {
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  .kernel-text { }
+  .kernel-points {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    margin-top: 2rem;
+  }
+  .kp {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .kp-num {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding-top: 0.1rem;
+    flex-shrink: 0;
+    min-width: 24px;
+  }
+  .kp-text { }
+  .kp-title {
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+  .kp-desc {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    line-height: 1.7;
+    color: var(--ink3);
+  }
+
+  /* PROTOCOLS SECTION */
+  .protocols-section { background: var(--bg); }
+  .protocols-table {
+    margin-top: 3.5rem;
+    border: 1.5px solid rgba(15,14,12,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .ptable-header {
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr 1fr 1fr;
+    background: var(--ink);
+    padding: 0.9rem 1.5rem;
+    gap: 1rem;
+  }
+  .ptable-header span {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244,241,236,0.5);
+  }
+  .ptable-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr 1fr 1fr;
+    padding: 1.1rem 1.5rem;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(15,14,12,0.07);
+    transition: background 0.2s;
+    align-items: center;
+  }
+  .ptable-row:last-child { border-bottom: none; }
+  .ptable-row:hover { background: var(--bg2); }
+  .ptable-row span {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--ink3);
+  }
+  .ptable-proto {
+    font-family: var(--sans) !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    letter-spacing: -0.01em;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.4rem;
+    background: #2A7A4B;
+  }
+
+  /* P2P SECTION */
+  .p2p-section {
+    background: var(--bg2);
+  }
+  .p2p-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+    margin-top: 3rem;
+  }
+  .p2p-visual {
+    position: relative;
+    height: 360px;
+  }
+  .p2p-node {
+    position: absolute;
+    width: 80px; height: 80px;
+    background: #FAFBFF;
+    border: 1.5px solid rgba(10,10,15,0.12);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    box-shadow: 0 8px 24px rgba(15,14,12,0.08);
+    animation: nodePulse 3s ease-in-out infinite;
+  }
+  @keyframes nodePulse {
+    0%,100% { box-shadow: 0 8px 24px rgba(15,14,12,0.08); }
+    50% { box-shadow: 0 8px 32px rgba(200,75,47,0.18); }
+  }
+  .p2p-node-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .p2p-node-icon { font-size: 1.4rem; }
+  .node-a { top: 30px; left: 40px; animation-delay: 0s; }
+  .node-b { top: 30px; right: 40px; animation-delay: 0.8s; }
+  .node-c { bottom: 40px; left: 20%; animation-delay: 1.6s; }
+  .node-d { bottom: 40px; right: 20%; animation-delay: 2.4s; }
+  .p2p-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 56px; height: 56px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 1.2rem;
+    box-shadow: 0 0 0 12px rgba(200,75,47,0.1), 0 0 0 24px rgba(200,75,47,0.05);
+    animation: centerPulse 2s ease-in-out infinite;
+  }
+  @keyframes centerPulse {
+    0%,100% { box-shadow: 0 0 0 12px rgba(200,75,47,0.1), 0 0 0 24px rgba(200,75,47,0.05); }
+    50% { box-shadow: 0 0 0 18px rgba(200,75,47,0.15), 0 0 0 36px rgba(200,75,47,0.05); }
+  }
+  /* SVG lines */
+  .p2p-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .p2p-line {
+    stroke: rgba(200,75,47,0.2);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 4;
+    animation: dashMove 2s linear infinite;
+  }
+  @keyframes dashMove { to { stroke-dashoffset: -20; } }
+
+  /* AI SECTION */
+  .ai-section { background: var(--bg); }
+  .ai-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+  .ai-console {
+    background: var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 72px rgba(15,14,12,0.15);
+    transform: rotateX(5deg) rotateY(-4deg);
+    transform-style: preserve-3d;
+  }
+  .console-header {
+    background: rgba(244,241,236,0.06);
+    padding: 0.8rem 1.2rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    border-bottom: 1px solid rgba(244,241,236,0.06);
+  }
+  .console-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .console-body {
+    padding: 1.4rem 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    line-height: 1.9;
+  }
+  .cl { display: flex; gap: 0.6rem; }
+  .cl-prompt { color: var(--accent); flex-shrink: 0; }
+  .cl-text { color: rgba(244,241,236,0.75); }
+  .cl-comment { color: rgba(244,241,236,0.3); }
+  .cl-val { color: var(--gold); }
+  .cl-warn { color: #F5A623; }
+  .cl-ok { color: #2A7A4B; }
+  .cl-ai { color: #7A9CF5; }
+  .console-cursor {
+    display: inline-block;
+    width: 7px; height: 13px;
+    background: var(--accent);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--ink);
+    text-align: center;
+    padding: 8rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--sans);
+    font-size: 22vw;
+    font-weight: 800;
+    color: rgba(244,241,236,0.03);
+    white-space: nowrap;
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    user-select: none;
+  }
+  .cta-section .section-label { justify-content: center; }
+  .cta-title {
+    font-family: var(--sans);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--bg);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+  .cta-title em { font-family: var(--serif); font-style: italic; color: var(--gold); }
+  .cta-sub {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: rgba(244,241,236,0.45);
+    line-height: 1.8;
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+  }
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-light {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 0.9rem 2rem;
+    border: none; cursor: none;
+    border-radius: var(--r);
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-light:hover { background: var(--gold); transform: translateY(-2px); }
+  .btn-outline-light {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(244,241,236,0.6);
+    padding: 0.9rem 2rem;
+    border: 1.5px solid rgba(244,241,236,0.2);
+    cursor: none;
+    border-radius: var(--r);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline-light:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(244,241,236,0.06);
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(244,241,236,0.35);
+  }
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: rgba(244,241,236,0.2);
+    letter-spacing: 0.05em;
+  }
+
+  /* REVEAL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* MICROPROCESSOR VISUAL */
+  .cpu-visual {
+    position: relative;
+    width: 280px; height: 280px;
+    margin: 0 auto;
+    perspective: 800px;
+  }
+  .cpu-chip {
+    width: 200px; height: 200px;
+    background: var(--ink);
+    border-radius: 12px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(30deg) rotateZ(15deg);
+    border: 2px solid rgba(184,146,74,0.4);
+    box-shadow:
+      0 0 0 1px rgba(184,146,74,0.1),
+      inset 0 0 30px rgba(184,146,74,0.05),
+      0 20px 60px rgba(15,14,12,0.3);
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-template-rows: repeat(5,1fr);
+    gap: 4px;
+    padding: 16px;
+  }
+  .cpu-unit {
+    border-radius: 2px;
+    transition: opacity 0.3s;
+    animation: cpuFlicker 3s ease-in-out infinite;
+  }
+  .cu-a { background: rgba(200,75,47,0.5); animation-delay: 0.1s; }
+  .cu-b { background: rgba(26,58,92,0.6); animation-delay: 0.5s; }
+  .cu-c { background: rgba(184,146,74,0.4); animation-delay: 1s; }
+  .cu-d { background: rgba(42,122,75,0.4); animation-delay: 1.5s; }
+  .cu-e { background: rgba(244,241,236,0.08); }
+  @keyframes cpuFlicker {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .cpu-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(30deg) rotateZ(15deg);
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+    text-shadow: 0 0 10px rgba(184,146,74,0.5);
+  }
+  .cpu-pins {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%) rotateX(30deg) rotateZ(15deg);
+    width: 220px; height: 220px;
+    pointer-events: none;
+  }
+  .pin {
+    position: absolute;
+    background: rgba(184,146,74,0.5);
+    width: 2px;
+  }
+  /* top/bottom pins */
+  .pin-t, .pin-b { height: 12px; }
+  .pin-l, .pin-r { width: 12px; height: 2px; }
+
+  /* STAT ROW */
+  .stat-row {
+    display: flex;
+    gap: 0;
+    border: 1.5px solid rgba(15,14,12,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 4rem;
+  }
+  .stat-item {
+    flex: 1;
+    padding: 2rem 1.5rem;
+    border-right: 1px solid rgba(15,14,12,0.1);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-val sup { font-size: 0.8rem; color: var(--accent); }
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink3);
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .perf-grid { grid-template-columns: 1fr; }
+    .kernel-layout, .p2p-layout, .ai-layout, .protocols-table { grid-template-columns: 1fr; }
+    .ptable-header, .ptable-row { grid-template-columns: 1fr 1fr 1fr; }
+    .ptable-header span:nth-child(4), .ptable-header span:nth-child(5),
+    .ptable-row span:nth-child(4), .ptable-row span:nth-child(5) { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    ComputeNexus
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#protocols">Protocols</a></li>
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#debug">Debug</a></li>
+  </ul>
+  <button class="nav-cta">Request Access</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Protocol Intelligence Platform</div>
+    <h1 class="hero-title">
+      Microsecond<br>
+      <em>Precision</em><br>
+      Protocols Testing
+    </h1>
+    <p class="hero-tagline">
+      From DNS resolution to kernel syscall — every nanosecond measured, every bottleneck explained, every fix suggested. AI-powered insights for engineers who care about the last microsecond.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Start Testing Free</a>
+      <a href="#features" class="btn-secondary">Explore Features</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="metric-badge mb1">⚡ 0.8μs syscall overhead</div>
+    <div class="metric-badge mb2">🔍 AI insight ready</div>
+    <div class="metric-badge mb3">📡 P2P discovery active</div>
+
+    <div class="scene-3d">
+      <!-- Main latency card -->
+      <div class="latency-card card-main">
+        <div class="card-title">Latency Timeline</div>
+        <div class="timeline">
+          <div class="tl-row">
+            <span class="tl-label">DNS</span>
+            <div class="tl-bar-wrap"><div class="tl-bar bar-dns"></div></div>
+            <span class="tl-val">12ms</span>
+          </div>
+          <div class="tl-row">
+            <span class="tl-label">TCP</span>
+            <div class="tl-bar-wrap"><div class="tl-bar bar-tcp"></div></div>
+            <span class="tl-val">22ms</span>
+          </div>
+          <div class="tl-row">
+            <span class="tl-label">TLS</span>
+            <div class="tl-bar-wrap"><div class="tl-bar bar-tls"></div></div>
+            <span class="tl-val">10ms</span>
+          </div>
+          <div class="tl-row">
+            <span class="tl-label">TTFB</span>
+            <div class="tl-bar-wrap"><div class="tl-bar bar-ttfb"></div></div>
+            <span class="tl-val">31ms</span>
+          </div>
+          <div class="tl-row">
+            <span class="tl-label">Download</span>
+            <div class="tl-bar-wrap"><div class="tl-bar bar-dl"></div></div>
+            <span class="tl-val">17ms</span>
+          </div>
+        </div>
+        <div class="card-total">
+          <span class="card-total-label">Total</span>
+          <span class="card-total-val">92ms</span>
+        </div>
+      </div>
+
+      <!-- Protocol card -->
+      <div class="latency-card card-secondary">
+        <div class="card-title">Protocols</div>
+        <div class="proto-pills">
+          <span class="proto-pill pill-red">HTTP/3</span>
+          <span class="proto-pill pill-blue">gRPC</span>
+          <span class="proto-pill pill-gold">WebSocket</span>
+          <span class="proto-pill pill-green">TCP/UDP</span>
+          <span class="proto-pill pill-red">IPC</span>
+          <span class="proto-pill pill-blue">QUIC</span>
+        </div>
+      </div>
+
+      <!-- AI Insight card -->
+      <div class="latency-card card-tertiary">
+        <div class="card-title">AI Insight</div>
+        <div class="ai-insight">
+          <span class="ai-badge">∿ AI Analysis</span>
+          <div class="ai-line">TTFB high — DB query bottleneck at query layer, not network.</div>
+          <div class="ai-line">Enable HTTP/2 multiplexing → save ~18ms.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAT ROW -->
+<div style="padding: 0 3rem; background: var(--bg);">
+  <div class="stat-row reveal">
+    <div class="stat-item">
+      <div class="stat-val">0.8<sup>μs</sup></div>
+      <div class="stat-label">Min timing resolution</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">8+</div>
+      <div class="stat-label">Protocols supported</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">P2P</div>
+      <div class="stat-label">Zero-cloud sharing</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">AI</div>
+      <div class="stat-label">Fix suggestions</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">∞</div>
+      <div class="stat-label">Chain depth</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="section-label">Core Capabilities</div>
+  <h2 class="section-title reveal">Every layer of<br>latency, <em>exposed</em></h2>
+  <p class="section-sub reveal reveal-delay-1">From socket creation to byte delivery — ComputeNexus instruments the entire request lifecycle with kernel-level precision.</p>
+
+  <div class="features-grid reveal reveal-delay-2">
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-name">Latency Timeline</div>
+      <div class="feat-desc">Decompose every request into DNS lookup, TCP handshake, TLS negotiation, TTFB, and download time. See exactly where milliseconds are being lost.</div>
+      <span class="feat-tag">→ DNS · TCP · TLS · TTFB</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔗</div>
+      <div class="feat-name">API Chain Testing</div>
+      <div class="feat-desc">Pipe response data from one endpoint directly into the next. Measure cumulative latency across entire microservice chains with cascade visualisation.</div>
+      <span class="feat-tag">→ Response chaining · Waterfall view</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">📡</div>
+      <div class="feat-name">P2P Device Discovery</div>
+      <div class="feat-desc">Share curl requests peer-to-peer over local network without any cloud. mDNS-powered instant discovery. No accounts, no sync, no latency overhead.</div>
+      <span class="feat-tag">→ LAN discovery · Zero-cloud</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🧬</div>
+      <div class="feat-name">Multi-Protocol Engine</div>
+      <div class="feat-desc">Test the same payload across HTTP, gRPC, WebSocket, TCP/UDP, IPC and QUIC simultaneously. Compare protocol efficiency for your exact workload.</div>
+      <span class="feat-tag">→ Cross-protocol comparison</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔬</div>
+      <div class="feat-name">Microsecond Debug Console</div>
+      <div class="feat-desc">Auto-discover localhost running services. Correlate latency spikes directly to code lines. Instrument at μs precision without external profilers.</div>
+      <span class="feat-tag">→ Service autodiscovery · Code correlation</span>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">✦</div>
+      <div class="feat-name">AI Insight Engine</div>
+      <div class="feat-desc">Receive actionable fix suggestions, not just data. "Your TTFB is a server-side bottleneck — check your DB query" rather than a raw number.</div>
+      <span class="feat-tag">→ Root cause · Fix suggestions</span>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE / KERNEL SECTION -->
+<section class="perf-section" id="performance">
+  <div class="chip-3d-container">
+    <div class="chip-3d">
+      <div class="chip-inner">
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+        <div class="chip-cell"></div><div class="chip-cell"></div><div class="chip-cell"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Hardware-Grade Precision</div>
+  <h2 class="section-title reveal">Tuned at the<br><em>kernel</em> level</h2>
+  <p class="section-sub reveal reveal-delay-1">ComputeNexus instruments timing using hardware performance counters and kernel syscall tracing — the same primitives used by Linux perf and eBPF tooling.</p>
+
+  <div class="perf-grid">
+    <div class="perf-metric reveal reveal-delay-1">
+      <div class="perf-metric-name">CPU Clock Precision</div>
+      <div class="perf-metric-val">RDTSC<span>native</span></div>
+      <div class="perf-metric-desc">Uses CPU timestamp counter directly — bypassing OS timer APIs for sub-microsecond measurement accuracy independent of system load.</div>
+    </div>
+    <div class="perf-metric reveal reveal-delay-2">
+      <div class="perf-metric-name">Syscall Overhead</div>
+      <div class="perf-metric-val">&lt;1<span>μs</span></div>
+      <div class="perf-metric-desc">Instrumentation overhead is measured and subtracted. What you see is net latency, not your tooling's noise floor mixed with your signal.</div>
+    </div>
+    <div class="perf-metric reveal reveal-delay-3">
+      <div class="perf-metric-name">Socket Buffer Visibility</div>
+      <div class="perf-metric-name" style="margin-top:0.3rem; color: var(--gold); font-size:0.75rem;">Kernel → App layer</div>
+      <div class="perf-metric-desc">See how kernel socket send/receive buffers affect throughput. Know when you're limited by TCP window size versus application processing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- KERNEL / OS / MICROPROCESSOR SECTION -->
+<section class="kernel-section">
+  <div class="kernel-layout">
+    <div class="kernel-text reveal">
+      <div class="section-label">OS & Kernel Awareness</div>
+      <h2 class="section-title">From user space<br>to <em>bare metal</em></h2>
+      <p class="section-sub">ComputeNexus understands where your request lives in the system stack — and attributes latency to the correct layer with precision no HTTP client can match.</p>
+
+      <div class="kernel-points">
+        <div class="kp">
+          <div class="kp-num">01</div>
+          <div class="kp-text">
+            <div class="kp-title">Microprocessor Timing</div>
+            <div class="kp-desc">Direct access to hardware performance counters. Cache miss rates, branch mispredictions, and TLB flushes that affect your API latency are now visible.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">02</div>
+          <div class="kp-text">
+            <div class="kp-title">Kernel Syscall Tracing</div>
+            <div class="kp-desc">Track the exact path of your request through the kernel network stack — from socket creation through the TCP/IP layer to the NIC driver.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">03</div>
+          <div class="kp-text">
+            <div class="kp-title">OS Scheduler Awareness</div>
+            <div class="kp-desc">Detect when latency spikes are caused by OS context switches or process preemption — not your code — so you fix the right thing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System stack diagram -->
+    <div class="reveal reveal-delay-2">
+      <div class="stack-diagram">
+        <div class="stack-layer sl-app">
+          <span class="sl-name">Application Layer</span>
+          <span class="sl-tag">ComputeNexus instruments here</span>
+        </div>
+        <div class="stack-arrow"><span class="arrow-indicator">↕</span> Context switch boundary</div>
+        <div class="stack-layer sl-lib">
+          <span class="sl-name">Standard Library / libc</span>
+          <span class="sl-tag">glibc, musl</span>
+        </div>
+        <div class="stack-arrow"><span class="arrow-indicator">↕</span> Syscall interface</div>
+        <div class="stack-layer sl-syscall">
+          <span class="sl-name">System Call Layer</span>
+          <span class="sl-tag">read · write · send · recv</span>
+        </div>
+        <div class="stack-arrow" style="color:rgba(244,241,236,0.3)"><span class="arrow-indicator" style="color:var(--gold)">↕</span> Kernel space</div>
+        <div class="stack-layer sl-kernel">
+          <span class="sl-name">Linux Kernel</span>
+          <span class="sl-tag">TCP/IP Stack · Socket buffers · NIC driver</span>
+        </div>
+        <div class="stack-arrow" style="color:rgba(244,241,236,0.2)"><span class="arrow-indicator" style="color:var(--accent)">↕</span> Hardware interrupt</div>
+        <div class="stack-layer sl-hw">
+          <span class="sl-name">Hardware / NIC</span>
+          <span class="sl-tag">DMA · Interrupt coalescing · Offloading</span>
+        </div>
+      </div>
+
+      <!-- CPU Visual -->
+      <div style="margin-top: 2.5rem;">
+        <div class="cpu-visual">
+          <div class="cpu-chip">
+            <div class="cpu-unit cu-a"></div><div class="cpu-unit cu-b"></div><div class="cpu-unit cu-c"></div><div class="cpu-unit cu-b"></div><div class="cpu-unit cu-a"></div>
+            <div class="cpu-unit cu-e"></div><div class="cpu-unit cu-d"></div><div class="cpu-unit cu-e"></div><div class="cpu-unit cu-d"></div><div class="cpu-unit cu-e"></div>
+            <div class="cpu-unit cu-b"></div><div class="cpu-unit cu-c"></div><div class="cpu-unit cu-a"></div><div class="cpu-unit cu-c"></div><div class="cpu-unit cu-b"></div>
+            <div class="cpu-unit cu-e"></div><div class="cpu-unit cu-d"></div><div class="cpu-unit cu-e"></div><div class="cpu-unit cu-d"></div><div class="cpu-unit cu-e"></div>
+            <div class="cpu-unit cu-c"></div><div class="cpu-unit cu-a"></div><div class="cpu-unit cu-b"></div><div class="cpu-unit cu-a"></div><div class="cpu-unit cu-c"></div>
+          </div>
+          <div class="cpu-label">μProc<br>Core</div>
+        </div>
+        <p style="font-family:var(--mono);font-size:0.62rem;color:var(--ink3);text-align:center;margin-top:0.6rem;letter-spacing:0.08em;">Microprocessor core state — visible to ComputeNexus debug console</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOCOLS -->
+<section class="protocols-section" id="protocols">
+  <div class="section-label">Protocol Coverage</div>
+  <h2 class="section-title reveal">One tool.<br><em>Every</em> protocol.</h2>
+  <p class="section-sub reveal reveal-delay-1">Test across all communication layers and compare performance of the same payload across different transport mechanisms.</p>
+
+  <div class="protocols-table reveal reveal-delay-2">
+    <div class="ptable-header">
+      <span>Protocol</span>
+      <span>Use Case</span>
+      <span>Latency Profiling</span>
+      <span>Payload Compare</span>
+      <span>Chain Support</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">HTTP/1.1 · 2 · 3</span>
+      <span>REST APIs, Web Services</span>
+      <span><span class="status-dot"></span>Full timeline</span>
+      <span>✓</span>
+      <span>✓</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">gRPC</span>
+      <span>Microservices, Streaming</span>
+      <span><span class="status-dot"></span>Full timeline</span>
+      <span>✓</span>
+      <span>✓</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">WebSocket</span>
+      <span>Real-time, Bidirectional</span>
+      <span><span class="status-dot"></span>Frame-level</span>
+      <span>✓</span>
+      <span>✓</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">TCP / UDP</span>
+      <span>Raw transport, Gaming, DNS</span>
+      <span><span class="status-dot"></span>Socket-level</span>
+      <span>✓</span>
+      <span>—</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">IPC / Unix Socket</span>
+      <span>Inter-process, OS-level</span>
+      <span><span class="status-dot"></span>Syscall-level</span>
+      <span>✓</span>
+      <span>—</span>
+    </div>
+    <div class="ptable-row">
+      <span class="ptable-proto">QUIC</span>
+      <span>Low-latency, Mobile</span>
+      <span><span class="status-dot"></span>Full timeline</span>
+      <span>✓</span>
+      <span>✓</span>
+    </div>
+  </div>
+</section>
+
+<!-- P2P SECTION -->
+<section class="p2p-section">
+  <div class="p2p-layout">
+    <div class="reveal">
+      <div class="section-label">Device Discovery</div>
+      <h2 class="section-title">P2P sharing<br><em>without</em> the cloud</h2>
+      <p class="section-sub">Broadcast curl requests directly to other ComputeNexus instances on your local network. No upload, no account, no latency overhead from a relay server.</p>
+      <div class="kernel-points" style="margin-top:2rem">
+        <div class="kp">
+          <div class="kp-num">→</div>
+          <div class="kp-text">
+            <div class="kp-title">mDNS Auto-Discovery</div>
+            <div class="kp-desc">Devices running ComputeNexus appear automatically. No IP configuration required — just open and share.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">→</div>
+          <div class="kp-text">
+            <div class="kp-title">Cross-Environment Testing</div>
+            <div class="kp-desc">Send a test from your Mac to a Linux VM, a Docker container, or a colleague's Windows machine — compare results in real time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="p2p-visual">
+        <svg class="p2p-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <line class="p2p-line" x1="22" y1="25" x2="50" y2="50"/>
+          <line class="p2p-line" x1="78" y1="25" x2="50" y2="50" style="animation-delay:0.5s"/>
+          <line class="p2p-line" x1="30" y1="75" x2="50" y2="50" style="animation-delay:1s"/>
+          <line class="p2p-line" x1="70" y1="75" x2="50" y2="50" style="animation-delay:1.5s"/>
+        </svg>
+        <div class="p2p-node node-a">
+          <div class="p2p-node-icon">💻</div>
+          <div class="p2p-node-label">macOS</div>
+        </div>
+        <div class="p2p-node node-b">
+          <div class="p2p-node-icon">🖥</div>
+          <div class="p2p-node-label">Linux</div>
+        </div>
+        <div class="p2p-node node-c">
+          <div class="p2p-node-icon">🪟</div>
+          <div class="p2p-node-label">Windows</div>
+        </div>
+        <div class="p2p-node node-d">
+          <div class="p2p-node-icon">🐳</div>
+          <div class="p2p-node-label">Docker</div>
+        </div>
+        <div class="p2p-center">⚡</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEBUG / AI SECTION -->
+<section class="ai-section" id="debug">
+  <div class="ai-layout">
+    <div class="reveal">
+      <div class="section-label">AI Debug Console</div>
+      <h2 class="section-title">Insights that<br>tell you <em>what to fix</em></h2>
+      <p class="section-sub">The debug console auto-discovers every service running on localhost, attaches timing probes, and sends latency data to the AI engine — which responds with specific, actionable optimisation steps.</p>
+      <div class="kernel-points" style="margin-top:2rem">
+        <div class="kp">
+          <div class="kp-num">01</div>
+          <div class="kp-text">
+            <div class="kp-title">Auto-Service Discovery</div>
+            <div class="kp-desc">Port scanning + process inspection finds every HTTP, gRPC, WebSocket, and IPC service running locally — no manual configuration.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">02</div>
+          <div class="kp-text">
+            <div class="kp-title">Code-Level Correlation</div>
+            <div class="kp-desc">Latency attributed to the exact function call and line number — not just the endpoint. Instrument your code once, see results in the console.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">03</div>
+          <div class="kp-text">
+            <div class="kp-title">AI Fix Suggestions</div>
+            <div class="kp-desc">Natural language explanations of every bottleneck with concrete, ranked, implementation-ready suggestions. Not a chart. A solution.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal reveal-delay-2">
+      <div class="ai-console">
+        <div class="console-header">
+          <div class="console-dot" style="background:#ff5f57"></div>
+          <div class="console-dot" style="background:#ffbd2e"></div>
+          <div class="console-dot" style="background:#28ca41"></div>
+          <span style="font-family:var(--mono);font-size:0.6rem;color:rgba(244,241,236,0.3);margin-left:0.5rem;letter-spacing:0.1em;">computenexus — debug console</span>
+        </div>
+        <div class="console-body">
+          <div class="cl"><span class="cl-prompt">◆</span><span class="cl-comment">// Scanning localhost services...</span></div>
+          <div class="cl"><span class="cl-prompt">✓</span><span class="cl-ok">Found: :3000 (Node.js Express)</span></div>
+          <div class="cl"><span class="cl-prompt">✓</span><span class="cl-ok">Found: :5432 (PostgreSQL)</span></div>
+          <div class="cl"><span class="cl-prompt">✓</span><span class="cl-ok">Found: :6379 (Redis)</span></div>
+          <div class="cl"><span class="cl-prompt">✓</span><span class="cl-ok">Found: :50051 (gRPC server)</span></div>
+          <br>
+          <div class="cl"><span class="cl-prompt">◆</span><span class="cl-comment">// Profiling GET /api/users/feed</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-text">DNS resolve:&nbsp;&nbsp;</span><span class="cl-val">0.2ms</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-text">TCP connect:&nbsp;</span><span class="cl-val">1.1ms</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-text">TTFB:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="cl-warn">382ms ⚠</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-text">Download:&nbsp;&nbsp;&nbsp;</span><span class="cl-val">8.4ms</span></div>
+          <br>
+          <div class="cl"><span class="cl-prompt">✦</span><span class="cl-ai">AI: TTFB spike is server-side.</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-ai">→ DB query missing index on user_id.</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-ai">→ Add: CREATE INDEX idx_uid ON posts(user_id)</span></div>
+          <div class="cl"><span class="cl-prompt"> </span><span class="cl-ai">→ Expected improvement: ~340ms</span></div>
+          <br>
+          <div class="cl"><span class="cl-prompt">_</span><span class="console-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg-text">NEXUS</div>
+  <div class="section-label" style="color:var(--gold)">Get Early Access</div>
+  <h2 class="cta-title reveal">Stop guessing.<br>Start <em>measuring.</em></h2>
+  <p class="cta-sub reveal reveal-delay-1">Join engineers who refuse to accept "it's probably the network" as an answer. ComputeNexus shows you exactly where time goes — and how to get it back.</p>
+  <div class="cta-actions reveal reveal-delay-2">
+    <a href="#" class="btn-light">Request Early Access</a>
+    <a href="#" class="btn-outline-light">View on GitHub</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">◆ ComputeNexus</div>
+  <div class="footer-copy">© 2025 ComputeNexus. Microsecond precision, macroscopic insight.</div>
+</footer>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .feat-card, .perf-metric, .stack-layer').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '18px';
+    cursor.style.height = '18px';
+    ring.style.width = '50px';
+    ring.style.height = '50px';
+    ring.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '10px';
+    cursor.style.height = '10px';
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Hero 3D mouse parallax
+const scene = document.querySelector('.scene-3d');
+document.addEventListener('mousemove', e => {
+  if (!scene) return;
+  const x = (e.clientX / window.innerWidth - 0.5) * 18;
+  const y = (e.clientY / window.innerHeight - 0.5) * 12;
+  scene.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+});
+
+// Animated counter
+function animateVal(el, target, suffix = '') {
+  let current = 0;
+  const step = target / 40;
+  const interval = setInterval(() => {
+    current = Math.min(current + step, target);
+    el.textContent = Math.round(current) + suffix;
+    if (current >= target) clearInterval(interval);
+  }, 30);
+}
+
+// Counter observer
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      statObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+</script>
+</body>
+</html>
