@@ -1100,6 +1100,611 @@
     .nav-links { display: none; }
     section { padding: 5rem 1.5rem; }
   }
+
+  /* ═══════════════════════════════════════════
+     NEXUSTRACE — EMBEDDED LIBRARY SECTION
+     ═══════════════════════════════════════════ */
+  .nexustrace-section {
+    background: var(--bg);
+    border-top: 1px solid rgba(10,10,15,0.07);
+  }
+  .nt-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    margin-top: 4rem;
+  }
+  .nt-code-block {
+    background: #0D1117;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 20px 60px rgba(10,10,15,0.12);
+  }
+  .nt-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    padding: 0 1rem;
+  }
+  .nt-tab {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 0.7rem 0.9rem;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .nt-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .nt-code {
+    padding: 1.4rem 1.5rem;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    line-height: 2;
+    display: none;
+  }
+  .nt-code.active { display: block; }
+  .nc-comment { color: rgba(255,255,255,0.25); }
+  .nc-keyword  { color: #79A8F5; }
+  .nc-fn       { color: #7EC8A4; }
+  .nc-str      { color: #C9956C; }
+  .nc-val      { color: #B8924A; }
+  .nc-dim      { color: rgba(255,255,255,0.4); }
+  .nc-accent   { color: #C84B2F; }
+
+  .nt-report-preview {
+    margin-top: 1.5rem;
+    border: 1px solid rgba(10,10,15,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .nrp-header {
+    background: var(--bg2);
+    padding: 0.75rem 1.2rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nrp-title {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nrp-title::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .nrp-ext {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+  }
+  .nrp-body { padding: 1.2rem; display: flex; flex-direction: column; gap: 0.7rem; }
+  .nrp-row {
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .nrp-span-name {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--ink2);
+    width: 130px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+  .nrp-bar-track {
+    flex: 1;
+    height: 5px;
+    background: var(--bg2);
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+  }
+  .nrp-bar {
+    height: 100%;
+    border-radius: 3px;
+    position: absolute; left: 0; top: 0;
+  }
+  .nrp-ms {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--ink3);
+    width: 44px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .nrp-total {
+    border-top: 1px solid var(--bg2);
+    padding-top: 0.7rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nrp-total-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink3);
+  }
+  .nrp-total-val {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .nt-badges {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .nt-badge {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border-radius: 2px;
+    border: 1px solid rgba(10,10,15,0.15);
+    color: var(--ink3);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .nt-badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════════════════════════════════
+     CHAIN STUDIO — FLOW COMPOSER SECTION
+     ═══════════════════════════════════════════ */
+  .chain-section {
+    background: var(--bg2);
+    border-top: 1px solid rgba(10,10,15,0.07);
+  }
+  .chain-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    margin-top: 4rem;
+  }
+  .chain-canvas {
+    position: relative;
+    background: #fff;
+    border: 1px solid rgba(10,10,15,0.09);
+    border-radius: 10px;
+    padding: 1.8rem 1.6rem;
+    box-shadow: 0 8px 32px rgba(10,10,15,0.06);
+    overflow: hidden;
+  }
+  .chain-canvas-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink3);
+    margin-bottom: 1.4rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .chain-canvas-label::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .chain-nodes {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .chain-node {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .chain-node-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .cn-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    flex-shrink: 0;
+    margin-top: 1.1rem;
+    background: #fff;
+    position: relative;
+    z-index: 1;
+  }
+  .cn-line {
+    width: 1.5px;
+    flex: 1;
+    background: rgba(10,10,15,0.1);
+    margin: 2px 0;
+  }
+  .cn-line-dashed {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(200,75,47,0.35) 0px,
+      rgba(200,75,47,0.35) 4px,
+      transparent 4px,
+      transparent 9px
+    );
+  }
+  .chain-node-body {
+    flex: 1;
+    border: 1px solid rgba(10,10,15,0.1);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin: 0.35rem 0;
+    background: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .chain-node-body:hover {
+    border-color: rgba(200,75,47,0.3);
+    box-shadow: 0 2px 12px rgba(200,75,47,0.07);
+  }
+  .chain-node-body.is-parallel {
+    border-color: rgba(26,58,92,0.25);
+    border-style: dashed;
+  }
+  .chain-node-body.is-parallel:hover {
+    border-color: rgba(26,58,92,0.5);
+    box-shadow: 0 2px 12px rgba(26,58,92,0.07);
+  }
+  .cn-step {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cn-method {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 500;
+    padding: 0.1rem 0.35rem;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+  }
+  .method-get  { background: rgba(30,122,74,0.1);  color: #1E7A4A; }
+  .method-post { background: rgba(200,75,47,0.1);  color: #C84B2F; }
+  .cn-route {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .cn-extract {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--gold);
+    margin-top: 0.3rem;
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .cn-extract::before { content: '→'; color: var(--ink3); }
+  .cn-latency {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--ink3);
+    padding-top: 0.3rem;
+    margin-top: 0.3rem;
+    border-top: 1px solid var(--bg2);
+    display: flex; justify-content: space-between;
+  }
+  .cn-latency-val { color: var(--ink2); }
+  .cn-latency-warn { color: #F5A623; }
+
+  .chain-parallel-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 0.35rem 0;
+    flex: 1;
+  }
+  .chain-parallel-wrap {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .chain-dsl {
+    background: #0D1117;
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-top: 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    line-height: 1.9;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .chain-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    margin-top: 2rem;
+  }
+  .cf-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem;
+    border: 1px solid rgba(10,10,15,0.08);
+    border-radius: 6px;
+    background: #fff;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .cf-item:hover {
+    border-color: rgba(200,75,47,0.22);
+    transform: translateX(4px);
+  }
+  .cf-icon {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(10,10,15,0.12);
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+  .cf-title {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+  .cf-desc {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    line-height: 1.75;
+    color: var(--ink3);
+  }
+
+  /* ═══════════════════════════════════════════
+     NEXUSPROBE — AUTO DISCOVERY SECTION
+     ═══════════════════════════════════════════ */
+  .probe-section {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  .probe-section .section-label { color: var(--gold); }
+  .probe-section .section-label::before { background: var(--gold); }
+  .probe-section .section-title { color: #fff; }
+  .probe-section .section-sub   { color: rgba(255,255,255,0.45); }
+
+  /* faint dot grid bg */
+  .probe-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  .probe-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 6rem;
+    align-items: start;
+    margin-top: 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .probe-terminal {
+    background: #010409;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 72px rgba(0,0,0,0.4);
+  }
+  .probe-term-header {
+    background: rgba(255,255,255,0.04);
+    padding: 0.75rem 1.2rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .probe-term-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .probe-term-title {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.22);
+    margin-left: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+  .probe-term-body {
+    padding: 1.4rem 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    line-height: 2;
+  }
+  .pt-line { display: flex; gap: 0.5rem; align-items: baseline; }
+  .pt-prompt { color: var(--accent); flex-shrink: 0; font-size: 0.65rem; }
+  .pt-dim    { color: rgba(255,255,255,0.22); }
+  .pt-ok     { color: #4EC994; }
+  .pt-warn   { color: #F5A623; }
+  .pt-info   { color: #79A8F5; }
+  .pt-val    { color: var(--gold); }
+  .pt-white  { color: rgba(255,255,255,0.75); }
+
+  .probe-route-list {
+    margin-top: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .prl-header {
+    background: rgba(255,255,255,0.05);
+    padding: 0.65rem 1.1rem;
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .prl-header::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: #4EC994;
+    border-radius: 50%;
+  }
+  .prl-row {
+    display: flex; align-items: center;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 0.8rem;
+    transition: background 0.2s;
+  }
+  .prl-row:last-child { border-bottom: none; }
+  .prl-row:hover { background: rgba(255,255,255,0.03); }
+  .prl-method {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 0.12rem 0.38rem;
+    border-radius: 2px;
+    min-width: 36px;
+    text-align: center;
+  }
+  .prl-method-get  { background: rgba(78,201,148,0.15); color: #4EC994; }
+  .prl-method-post { background: rgba(200,75,47,0.15);  color: #C84B2F; }
+  .prl-method-del  { background: rgba(245,166,35,0.15); color: #F5A623; }
+  .prl-route {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.7);
+    flex: 1;
+    letter-spacing: 0.02em;
+  }
+  .prl-auth {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 2px;
+  }
+  .prl-ms {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--gold);
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .probe-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 0;
+  }
+  .probe-layer {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+  .probe-layer:hover { border-color: rgba(184,146,74,0.3); }
+  .probe-layer-num {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--gold);
+    min-width: 24px;
+    flex-shrink: 0;
+    padding-top: 0.1rem;
+  }
+  .probe-layer-title {
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.01em;
+  }
+  .probe-layer-desc {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.38);
+  }
+  .probe-layer-tag {
+    font-family: var(--mono);
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  .probe-stat-row {
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 2.5rem;
+  }
+  .probe-stat {
+    flex: 1;
+    padding: 1.2rem 1rem;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    text-align: center;
+  }
+  .probe-stat:last-child { border-right: none; }
+  .probe-stat-val {
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    color: #fff;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .probe-stat-val sup { font-size: 0.7rem; color: var(--gold); }
+  .probe-stat-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+  }
+
+  @media (max-width: 900px) {
+    .nt-layout, .chain-layout, .probe-layout { grid-template-columns: 1fr; }
+    .chain-parallel-group { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -1116,8 +1721,9 @@
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#protocols">Protocols</a></li>
-    <li><a href="#performance">Performance</a></li>
-    <li><a href="#debug">Debug</a></li>
+    <li><a href="#nexustrace">NexusTrace</a></li>
+    <li><a href="#chain">Chain Studio</a></li>
+    <li><a href="#probe">NexusProbe</a></li>
   </ul>
   <button class="nav-cta">Request Access</button>
 </nav>
@@ -1578,6 +2184,454 @@
 
 <!-- Other features and SDk and library for local apis discovery and testing -->
 
+<!-- ═══════════════════════════════════════════════════════════
+     NEXUSTRACE — EMBEDDED LATENCY REPORT LIBRARY
+     ═══════════════════════════════════════════════════════════ -->
+<section class="nexustrace-section" id="nexustrace">
+  <div class="section-label reveal">Embedded Intelligence</div>
+  <h2 class="section-title reveal">NexusTrace <em>Library</em></h2>
+  <p class="section-sub reveal reveal-delay-1">Instrument your service from the inside. One line of middleware generates portable latency reports — consumable by the testing tool, your CI pipeline, or a plain text editor.</p>
+
+  <div class="nt-layout">
+    <!-- LEFT: code tabs + report preview -->
+    <div class="reveal reveal-delay-1">
+      <div class="nt-code-block">
+        <div class="nt-tabs">
+          <div class="nt-tab active" onclick="ntTab(this,'node')">Node.js</div>
+          <div class="nt-tab" onclick="ntTab(this,'python')">Python</div>
+          <div class="nt-tab" onclick="ntTab(this,'go')">Go</div>
+        </div>
+
+        <!-- Node -->
+        <div class="nt-code active" id="nt-node">
+          <div><span class="nc-comment">// install: npm i nexustrace</span></div>
+          <div><span class="nc-keyword">import</span> <span class="nc-dim">nexusTrace</span> <span class="nc-keyword">from</span> <span class="nc-str">'nexustrace'</span></div>
+          <br>
+          <div><span class="nc-comment">// drop-in Express middleware — zero config</span></div>
+          <div><span class="nc-dim">app.</span><span class="nc-fn">use</span><span class="nc-dim">(nexusTrace.</span><span class="nc-fn">middleware</span><span class="nc-dim">())</span></div>
+          <br>
+          <div><span class="nc-comment">// generate report on demand</span></div>
+          <div><span class="nc-dim">nexusTrace.</span><span class="nc-fn">generateReport</span><span class="nc-dim">({</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-val">format</span><span class="nc-dim">:</span> <span class="nc-str">'nexus'</span><span class="nc-dim">,</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-val">last</span><span class="nc-dim">:</span> <span class="nc-str">'5m'</span><span class="nc-dim">,</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-val">output</span><span class="nc-dim">:</span> <span class="nc-str">'./reports/api-latency.nxr'</span></div>
+          <div><span class="nc-dim">})</span></div>
+        </div>
+
+        <!-- Python -->
+        <div class="nt-code" id="nt-python">
+          <div><span class="nc-comment"># install: pip install nexustrace</span></div>
+          <div><span class="nc-keyword">from</span> <span class="nc-dim">nexustrace</span> <span class="nc-keyword">import</span> <span class="nc-fn">instrument</span><span class="nc-dim">, NexusTrace</span></div>
+          <br>
+          <div><span class="nc-comment"># FastAPI — decorator pattern</span></div>
+          <div><span class="nc-dim">nt = NexusTrace(</span><span class="nc-val">app</span><span class="nc-dim">=app)</span></div>
+          <br>
+          <div><span class="nc-dim">@</span><span class="nc-fn">instrument</span></div>
+          <div><span class="nc-keyword">async def</span> <span class="nc-fn">get_users</span><span class="nc-dim">():</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-keyword">return</span> <span class="nc-keyword">await</span> <span class="nc-fn">db.query</span><span class="nc-dim">(</span><span class="nc-str">"SELECT * FROM users"</span><span class="nc-dim">)</span></div>
+          <br>
+          <div><span class="nc-comment"># export .nxr report</span></div>
+          <div><span class="nc-dim">nt.</span><span class="nc-fn">export</span><span class="nc-dim">(last=</span><span class="nc-str">"5m"</span><span class="nc-dim">, path=</span><span class="nc-str">"api.nxr"</span><span class="nc-dim">)</span></div>
+        </div>
+
+        <!-- Go -->
+        <div class="nt-code" id="nt-go">
+          <div><span class="nc-comment">// go get github.com/computenexus/trace</span></div>
+          <div><span class="nc-keyword">import</span> <span class="nc-str">"github.com/computenexus/trace"</span></div>
+          <br>
+          <div><span class="nc-comment">// wrap your ServeMux handler</span></div>
+          <div><span class="nc-dim">nt := trace.</span><span class="nc-fn">New</span><span class="nc-dim">()</span></div>
+          <div><span class="nc-dim">mux.</span><span class="nc-fn">Handle</span><span class="nc-dim">(</span><span class="nc-str">"/api/users"</span><span class="nc-dim">,</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-dim">nt.</span><span class="nc-fn">Wrap</span><span class="nc-dim">(handler))</span></div>
+          <br>
+          <div><span class="nc-comment">// generate report</span></div>
+          <div><span class="nc-dim">nt.</span><span class="nc-fn">Report</span><span class="nc-dim">(trace.Options{</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-val">Last</span><span class="nc-dim">:</span>&nbsp;<span class="nc-str">"5m"</span><span class="nc-dim">,</span></div>
+          <div>&nbsp;&nbsp;<span class="nc-val">Out</span><span class="nc-dim">:</span>&nbsp;&nbsp;<span class="nc-str">"api.nxr"</span><span class="nc-dim">,</span></div>
+          <div><span class="nc-dim">})</span></div>
+        </div>
+      </div>
+
+      <!-- .nxr report preview -->
+      <div class="nt-report-preview">
+        <div class="nrp-header">
+          <span class="nrp-title">api-latency.nxr — report preview</span>
+          <span class="nrp-ext">.nxr</span>
+        </div>
+        <div class="nrp-body">
+          <div class="nrp-row">
+            <span class="nrp-span-name">middleware</span>
+            <div class="nrp-bar-track"><div class="nrp-bar" style="width:4%;background:#B8924A"></div></div>
+            <span class="nrp-ms">0.8ms</span>
+          </div>
+          <div class="nrp-row">
+            <span class="nrp-span-name">auth.verify</span>
+            <div class="nrp-bar-track"><div class="nrp-bar" style="width:14%;background:#1A3A5C"></div></div>
+            <span class="nrp-ms">3.1ms</span>
+          </div>
+          <div class="nrp-row">
+            <span class="nrp-span-name">db.query</span>
+            <div class="nrp-bar-track"><div class="nrp-bar" style="width:72%;background:#C84B2F"></div></div>
+            <span class="nrp-ms" style="color:#C84B2F">16.4ms ⚠</span>
+          </div>
+          <div class="nrp-row">
+            <span class="nrp-span-name">json.serialize</span>
+            <div class="nrp-bar-track"><div class="nrp-bar" style="width:8%;background:#1E7A4A"></div></div>
+            <span class="nrp-ms">1.8ms</span>
+          </div>
+          <div class="nrp-row">
+            <span class="nrp-span-name">response.flush</span>
+            <div class="nrp-bar-track"><div class="nrp-bar" style="width:5%;background:#7A3A8C"></div></div>
+            <span class="nrp-ms">1.1ms</span>
+          </div>
+          <div class="nrp-total">
+            <span class="nrp-total-label">handler total</span>
+            <span class="nrp-total-val">23.2ms</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: description + badges -->
+    <div class="reveal reveal-delay-2">
+      <div class="kernel-points">
+        <div class="kp">
+          <div class="kp-num">01</div>
+          <div class="kp-text">
+            <div class="kp-title">Inside-out measurement</div>
+            <div class="kp-desc">Most tools measure from outside the service — they see network round-trip, nothing more. NexusTrace lives inside the process and captures every named span: middleware cost, DB wait, serialization, and flush time — separately and in microseconds.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">02</div>
+          <div class="kp-text">
+            <div class="kp-title">Portable .nxr report file</div>
+            <div class="kp-desc">Reports are self-contained binary files with a human-readable header. Email them, attach to a PR, diff against a previous version in CI — no dashboard login, no cloud dependency, no per-seat pricing.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">03</div>
+          <div class="kp-text">
+            <div class="kp-title">Three generation modes</div>
+            <div class="kp-desc">Always-on rolling buffer on disk (lock-free ring, near-zero overhead). On-demand snapshot via API call. Remote pull — the testing tool requests the buffer directly over the discovery channel without any file export step.</div>
+          </div>
+        </div>
+        <div class="kp">
+          <div class="kp-num">04</div>
+          <div class="kp-text">
+            <div class="kp-title">CI latency gates</div>
+            <div class="kp-desc">Diff two .nxr files and fail the build if P99 exceeds the baseline. Latency regressions become first-class CI failures — the same way test failures are — before they reach production.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nt-badges">
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#C84B2F"></div> Node.js</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#1A3A5C"></div> Python</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#1E7A4A"></div> Go</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#B8924A"></div> Rust</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#7A3A8C"></div> Java</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#4A8CC8"></div> .nxr format</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#1E7A4A"></div> CI diff mode</div>
+        <div class="nt-badge"><div class="nt-badge-dot" style="background:#B8924A"></div> Zero-cloud</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CHAIN STUDIO — FLOW COMPOSER
+     ═══════════════════════════════════════════════════════════ -->
+<section class="chain-section" id="chain">
+  <div class="section-label reveal">API Flow Composer</div>
+  <h2 class="section-title reveal">Chain Studio — <em>flows,</em><br>not just requests</h2>
+  <p class="section-sub reveal reveal-delay-1">Wire multi-API flows with a visual composer and a text DSL that stay in sync. Conditional branching, parallel fan-out, and critical-path latency analysis — built in.</p>
+
+  <div class="chain-layout">
+    <!-- LEFT: visual flow canvas -->
+    <div class="reveal reveal-delay-1">
+      <div class="chain-canvas">
+        <div class="chain-canvas-label">Visual Flow — user-purchase-journey</div>
+        <div class="chain-nodes">
+
+          <!-- Step 1 -->
+          <div class="chain-node">
+            <div class="chain-node-connector">
+              <div class="cn-dot" style="color:#1E7A4A;background:#1E7A4A;border-color:#1E7A4A"></div>
+              <div class="cn-line"></div>
+            </div>
+            <div class="chain-node-body">
+              <div class="cn-step">
+                <span style="color:var(--ink3)">Step 1</span>
+                <span class="cn-method method-get">GET</span>
+              </div>
+              <div class="cn-route">/api/auth/token</div>
+              <div class="cn-extract">$.data.access_token → $TOKEN</div>
+              <div class="cn-latency"><span>p50</span><span class="cn-latency-val">8ms</span></div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="chain-node">
+            <div class="chain-node-connector">
+              <div class="cn-dot" style="color:#1A3A5C;background:#1A3A5C;border-color:#1A3A5C"></div>
+              <div class="cn-line"></div>
+            </div>
+            <div class="chain-node-body">
+              <div class="cn-step">
+                <span style="color:var(--ink3)">Step 2</span>
+                <span class="cn-method method-get">GET</span>
+              </div>
+              <div class="cn-route">/api/users/me</div>
+              <div class="cn-extract">$.user.id → $USER_ID · $.user.plan → $PLAN</div>
+              <div class="cn-latency"><span>p50</span><span class="cn-latency-val">12ms</span></div>
+            </div>
+          </div>
+
+          <!-- Step 3 — parallel fan-out label -->
+          <div style="margin:0.2rem 0 0.2rem 2.4rem">
+            <span style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(26,58,92,0.25);padding:0.18rem 0.55rem;border-radius:2px">⇉ Parallel fan-out</span>
+          </div>
+
+          <!-- Steps 3A + 3B parallel -->
+          <div class="chain-parallel-wrap">
+            <div class="chain-node-connector">
+              <div class="cn-dot" style="color:var(--accent2);background:var(--accent2);border-color:var(--accent2)"></div>
+              <div class="cn-line cn-line-dashed"></div>
+            </div>
+            <div class="chain-parallel-group">
+              <div class="chain-node-body is-parallel">
+                <div class="cn-step">
+                  <span style="color:var(--accent2);font-size:0.55rem">3A · concurrent</span>
+                  <span class="cn-method method-post">POST</span>
+                </div>
+                <div class="cn-route" style="font-size:0.62rem">/api/cart/create</div>
+                <div class="cn-extract">$.cart.id → $CART_ID</div>
+                <div class="cn-latency"><span>p50</span><span class="cn-latency-val">22ms</span></div>
+              </div>
+              <div class="chain-node-body is-parallel">
+                <div class="cn-step">
+                  <span style="color:var(--accent2);font-size:0.55rem">3B · concurrent</span>
+                  <span class="cn-method method-get">GET</span>
+                </div>
+                <div class="cn-route" style="font-size:0.62rem">/api/products?plan=$PLAN</div>
+                <div class="cn-extract">$.[0].sku → $SKU</div>
+                <div class="cn-latency"><span>p50</span><span class="cn-latency-val">18ms</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 — barrier merged -->
+          <div style="margin:0.2rem 0 0.2rem 2.4rem">
+            <span style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:#1E7A4A;border:1px solid rgba(30,122,74,0.25);padding:0.18rem 0.55rem;border-radius:2px">⊕ Barrier — awaiting all branches</span>
+          </div>
+
+          <div class="chain-node">
+            <div class="chain-node-connector">
+              <div class="cn-dot" style="color:#C84B2F;background:#C84B2F;border-color:#C84B2F"></div>
+            </div>
+            <div class="chain-node-body">
+              <div class="cn-step">
+                <span style="color:var(--ink3)">Step 4</span>
+                <span class="cn-method method-post">POST</span>
+              </div>
+              <div class="cn-route">/api/cart/$CART_ID/add</div>
+              <div class="cn-extract">body: { sku: $SKU, qty: 1 }</div>
+              <div class="cn-latency"><span>critical path</span><span class="cn-latency-val cn-latency-warn">44ms total ⚡</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DSL view -->
+      <div class="chain-dsl">
+        <div style="color:rgba(255,255,255,0.22);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.8rem">DSL — synced with visual above</div>
+        <div><span class="nc-keyword">FLOW:</span> <span class="nc-str">user-purchase-journey</span></div>
+        <div style="color:rgba(255,255,255,0.18)">  ─────────────────────────────────────</div>
+        <div><span class="nc-dim">&nbsp;&nbsp;[1] </span><span class="nc-fn">GET</span> <span class="nc-val">/api/auth/token</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ extract: $.data.access_token → </span><span class="nc-accent">$TOKEN</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;[2] </span><span class="nc-fn">GET</span> <span class="nc-val">/api/users/me</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ extract: $.user.id → </span><span class="nc-accent">$USER_ID</span><span class="nc-dim">, $.user.plan → </span><span class="nc-accent">$PLAN</span></div>
+        <div><span class="nc-keyword">&nbsp;&nbsp;parallel {</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;&nbsp;&nbsp;[3A] </span><span class="nc-fn">POST</span> <span class="nc-val">/api/cart/create</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;&nbsp;&nbsp;[3B] </span><span class="nc-fn">GET</span> <span class="nc-val">/api/products?plan=</span><span class="nc-accent">$PLAN</span></div>
+        <div><span class="nc-keyword">&nbsp;&nbsp;} await barrier</span></div>
+        <div><span class="nc-dim">&nbsp;&nbsp;[4] </span><span class="nc-fn">POST</span> <span class="nc-val">/api/cart/</span><span class="nc-accent">$CART_ID</span><span class="nc-val">/add</span></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: feature list -->
+    <div class="reveal reveal-delay-2">
+      <div class="chain-features">
+        <div class="cf-item">
+          <div class="cf-icon">⇄</div>
+          <div>
+            <div class="cf-title">Visual ↔ DSL sync</div>
+            <div class="cf-desc">Edit the visual canvas and the DSL updates instantly. Edit the DSL text and the canvas re-renders. Same paradigm Figma uses for properties — applied to API flows.</div>
+          </div>
+        </div>
+        <div class="cf-item">
+          <div class="cf-icon">⇉</div>
+          <div>
+            <div class="cf-title">Parallel fan-out with barrier</div>
+            <div class="cf-desc">Fire multiple API calls concurrently, define a barrier that waits for all branches, then merge their outputs into the next step. Measures the true critical path latency of parallel flows — not the sum.</div>
+          </div>
+        </div>
+        <div class="cf-item">
+          <div class="cf-icon">⑂</div>
+          <div>
+            <div class="cf-title">Conditional routing</div>
+            <div class="cf-desc">Branch flows based on response values using JSONPath conditions. If step 2 returns <span style="font-family:var(--mono);font-size:0.65rem;color:var(--accent)">plan == "enterprise"</span> route to 3A, otherwise 3B — no code required.</div>
+          </div>
+        </div>
+        <div class="cf-item">
+          <div class="cf-icon">↺</div>
+          <div>
+            <div class="cf-title">Per-step retry policy</div>
+            <div class="cf-desc">Define retries, backoff strategy (linear, exponential), and jitter per node. The latency report shows retry cost separately from the successful-path cost — so you see exactly what resilience is costing you.</div>
+          </div>
+        </div>
+        <div class="cf-item">
+          <div class="cf-icon">⚡</div>
+          <div>
+            <div class="cf-title">Critical path analysis</div>
+            <div class="cf-desc">After running a flow, ComputeNexus identifies which sequence of dependent calls drove the total time — and which calls could be parallelised to reduce it. Actionable, not just a waterfall chart.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NEXUSPROBE — ZERO-CONFIG AUTO-DISCOVERY
+     ═══════════════════════════════════════════════════════════ -->
+<section class="probe-section" id="probe">
+  <div class="section-label reveal">Zero-Config Discovery</div>
+  <h2 class="section-title reveal">NexusProbe — your APIs,<br><em>already loaded</em></h2>
+  <p class="section-sub reveal reveal-delay-1">Open ComputeNexus and your running service is already there. Every route discovered, pre-filled, and ready to test — without touching a config file or importing a spec.</p>
+
+  <div class="probe-layout">
+    <!-- LEFT: terminal + route list -->
+    <div class="reveal reveal-delay-1">
+      <div class="probe-terminal">
+        <div class="probe-term-header">
+          <div class="probe-term-dot" style="background:#ff5f57"></div>
+          <div class="probe-term-dot" style="background:#ffbd2e"></div>
+          <div class="probe-term-dot" style="background:#28ca41"></div>
+          <span class="probe-term-title">nexusprobe — auto-discovery</span>
+        </div>
+        <div class="probe-term-body">
+          <div class="pt-line"><span class="pt-prompt">◆</span><span class="pt-dim">Scanning process table...</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">node (pid 8821) → :3000 → Express.js</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">python (pid 9104) → :8000 → FastAPI</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">postgres → :5432</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">redis → :6379</span></div>
+          <br>
+          <div class="pt-line"><span class="pt-prompt">◆</span><span class="pt-dim">Probing framework routes...</span></div>
+          <div class="pt-line"><span class="pt-prompt"> </span><span class="pt-info">:3000 → NexusTrace beacon detected</span></div>
+          <div class="pt-line"><span class="pt-prompt"> </span><span class="pt-info">:8000 → /openapi.json found (FastAPI)</span></div>
+          <br>
+          <div class="pt-line"><span class="pt-prompt">◆</span><span class="pt-dim">Loading route manifests...</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">:3000 — 9 routes loaded</span></div>
+          <div class="pt-line"><span class="pt-prompt">✓</span><span class="pt-ok">:8000 — 14 routes loaded</span></div>
+          <br>
+          <div class="pt-line"><span class="pt-prompt">✦</span><span class="pt-val">Ready in 2.4s — 23 routes available</span></div>
+        </div>
+      </div>
+
+      <!-- auto-loaded routes -->
+      <div class="probe-route-list">
+        <div class="prl-header">:3000 Express — routes auto-loaded</div>
+        <div class="prl-row">
+          <span class="prl-method prl-method-get">GET</span>
+          <span class="prl-route">/api/users</span>
+          <span class="prl-auth">Bearer</span>
+          <span class="prl-ms">12ms</span>
+        </div>
+        <div class="prl-row">
+          <span class="prl-method prl-method-post">POST</span>
+          <span class="prl-route">/api/users/login</span>
+          <span class="prl-auth">Public</span>
+          <span class="prl-ms">8ms</span>
+        </div>
+        <div class="prl-row">
+          <span class="prl-method prl-method-get">GET</span>
+          <span class="prl-route">/api/products</span>
+          <span class="prl-auth">Bearer</span>
+          <span class="prl-ms">22ms</span>
+        </div>
+        <div class="prl-row">
+          <span class="prl-method prl-method-post">POST</span>
+          <span class="prl-route">/api/cart/:id/add</span>
+          <span class="prl-auth">Bearer</span>
+          <span class="prl-ms">31ms</span>
+        </div>
+        <div class="prl-row">
+          <span class="prl-method prl-method-del">DEL</span>
+          <span class="prl-route">/api/cart/:id</span>
+          <span class="prl-auth">Bearer</span>
+          <span class="prl-ms">9ms</span>
+        </div>
+      </div>
+
+      <div class="probe-stat-row">
+        <div class="probe-stat">
+          <div class="probe-stat-val">2.4<sup>s</sup></div>
+          <div class="probe-stat-label">Discovery time</div>
+        </div>
+        <div class="probe-stat">
+          <div class="probe-stat-val">0</div>
+          <div class="probe-stat-label">Config files</div>
+        </div>
+        <div class="probe-stat">
+          <div class="probe-stat-val">4</div>
+          <div class="probe-stat-label">Discovery layers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: four discovery layers -->
+    <div class="reveal reveal-delay-2">
+      <div class="probe-layers">
+        <div class="probe-layer">
+          <div class="probe-layer-num">L1</div>
+          <div>
+            <div class="probe-layer-title">Process Inspection</div>
+            <div class="probe-layer-desc">Reads the OS process table — <span style="color:rgba(255,255,255,0.55)">/proc</span> on Linux, <span style="color:rgba(255,255,255,0.55)">libproc</span> on macOS, <span style="color:rgba(255,255,255,0.55)">ToolHelp32</span> on Windows — to find every process listening on a TCP port. Identifies runtime (Node.js, Python, Go, Java, Rust) from the binary path.</div>
+            <span class="probe-layer-tag">→ /proc · libproc · ToolHelp32</span>
+          </div>
+        </div>
+        <div class="probe-layer">
+          <div class="probe-layer-num">L2</div>
+          <div>
+            <div class="probe-layer-title">Framework Introspection</div>
+            <div class="probe-layer-desc">Probes known introspection endpoints per framework: FastAPI's <span style="color:rgba(255,255,255,0.55)">/openapi.json</span>, Spring Boot's <span style="color:rgba(255,255,255,0.55)">/actuator/mappings</span>, Rails' route info endpoint. No code change required for these frameworks.</div>
+            <span class="probe-layer-tag">→ OpenAPI · Actuator · Rails · pprof</span>
+          </div>
+        </div>
+        <div class="probe-layer">
+          <div class="probe-layer-num">L3</div>
+          <div>
+            <div class="probe-layer-title">Passive Traffic Sniffing</div>
+            <div class="probe-layer-desc">With optional packet capture permission, NexusProbe passively watches loopback traffic and builds a route inventory from observed requests — discovering endpoints as they are actually called, annotated with real latency distributions.</div>
+            <span class="probe-layer-tag">→ Optional · Local only · Loopback</span>
+          </div>
+        </div>
+        <div class="probe-layer">
+          <div class="probe-layer-num">L4</div>
+          <div>
+            <div class="probe-layer-title">NexusTrace Beacon</div>
+            <div class="probe-layer-desc">When NexusTrace is embedded in the service, it broadcasts a structured mDNS announcement containing the service name, port, framework, and a compressed route manifest. The testing tool receives this within milliseconds of the service starting — no polling required.</div>
+            <span class="probe-layer-tag">→ mDNS · Sub-second · Route manifest</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
   <div class="cta-bg-text">NEXUS</div>
@@ -1597,6 +2651,14 @@
 </footer>
 
 <script>
+// NexusTrace code tabs
+function ntTab(el, id) {
+  document.querySelectorAll('.nt-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nt-code').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('nt-' + id).classList.add('active');
+}
+
 // Cursor
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
